@@ -2,20 +2,25 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\FileRequest;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Api\BaseController;
+use App\Http\Requests\FileRequest;
 use Illuminate\Support\Facades\Storage;
 
-//TODO: Hay que comentar correctamente las funciones.
-class FileController extends Controller
+class FileController extends BaseController
 {
 
     private $public_path = 'public';
     private $public_storage_path = 'storage';
 
     /**
-     * Return the URL of the file. 
+     * Obtener la URL de un fichero.
+     * 
+     ** Es necesario pasar por Request las variables: LOCATION (Carpeta en la que se encuentra la imagen) y FILENAME (Nombre con el que se ha guardado el archivo).
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * 
+     * @return string
      */
     public function getUrl(Request $request)
     {
@@ -23,7 +28,13 @@ class FileController extends Controller
     }
 
     /**
-     * Download the file. 
+     * Descargar un archivo.
+     * 
+     ** Es necesario pasar por Request las variables: LOCATION (Carpeta en la que se encuentra la imagen) y FILENAME (Nombre con el que se ha guardado el archivo).
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * 
+     * @return Illuminate\Support\Facades\Storage
      */
     public function download(Request $request)
     {
@@ -31,41 +42,37 @@ class FileController extends Controller
     }
 
     /**
-     * Upload the file. 
+     * Almacenar un archivo
+     * 
+     ** Es necesario pasar por Request las variables: LOCATION (Carpeta en la que se encuentra la imagen) y FILENAME (Nombre con el que se ha guardado el archivo).
+     *
+     * @param  \Illuminate\Http\FileRequest  $request
+     * 
+     * @return \Illuminate\Http\Response
      */
     public function upload(FileRequest $request)
     {
+        //Guardamos el archivo que recibimos por Request y se guarda en una localización concreta.
         $file = $request->file('file')->store('public' . DIRECTORY_SEPARATOR . $request->location);
 
         try {
             $image = \Image::make(Storage::get($file));
-            $isLandscape = $this->isLandscape($image);
+            //Comprobamos la orientación de la imagen, esta función se encuentra en la clase Helpers.php.
+            $isLandscape = isLandscape($image);
 
+            //Dependiendo de la orientación se modifica el tamaño del archivo.
             if ($isLandscape) {
                 $image->resize(1240, 877);
             } else {
                 $image->resize(877, 1240);
             }
 
+            //Sobreescribimos la imagen por la imagen con el tamaño modificado.
             $image->save(storage_path('app' . DIRECTORY_SEPARATOR . $file));
         } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 200);
+            $this->handleError($e->getMessage());
         }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Image Upload Successful',
-            'filename' => $file
-        ], 200);
-    }
-
-    private function isLandscape($image)
-    {
-        $width = $image->width();
-        $height = $image->height();
-        return $width > $height;
+        return $this->handleResponse($file);
     }
 }

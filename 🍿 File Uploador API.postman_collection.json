@@ -1,0 +1,153 @@
+{
+	"info": {
+		"_postman_id": "4582c689-16d2-475d-b8d4-502258583208",
+		"name": "🍿 File Uploador API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20887044"
+	},
+	"item": [
+		{
+			"name": "[POST] Upload Image",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "carles123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "c.miranda@tecnol.es",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/cmiranda/Pictures/índice.jpg"
+						},
+						{
+							"key": "location",
+							"value": "orders",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "cmiranda.file-upload-api.local/api/file/upload",
+					"host": [
+						"cmiranda",
+						"file-upload-api",
+						"local"
+					],
+					"path": [
+						"api",
+						"file",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[GET] Get Image URL",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "carles123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "c.miranda@tecnol.es",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "cmiranda.file-upload-api.local/api/file/get?location=orders&filename=No4DpMFppQf9O3V5mxam7MNuswZnavhXSJtBuJSn.jpg",
+					"host": [
+						"cmiranda",
+						"file-upload-api",
+						"local"
+					],
+					"path": [
+						"api",
+						"file",
+						"get"
+					],
+					"query": [
+						{
+							"key": "location",
+							"value": "orders"
+						},
+						{
+							"key": "filename",
+							"value": "No4DpMFppQf9O3V5mxam7MNuswZnavhXSJtBuJSn.jpg"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[GET] Download Image",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "carles123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "c.miranda@tecnol.es",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "cmiranda.file-upload-api.local/api/file/download?location=orders&filename=No4DpMFppQf9O3V5mxam7MNuswZnavhXSJtBuJSn.jpg",
+					"host": [
+						"cmiranda",
+						"file-upload-api",
+						"local"
+					],
+					"path": [
+						"api",
+						"file",
+						"download"
+					],
+					"query": [
+						{
+							"key": "location",
+							"value": "orders"
+						},
+						{
+							"key": "filename",
+							"value": "No4DpMFppQf9O3V5mxam7MNuswZnavhXSJtBuJSn.jpg"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
