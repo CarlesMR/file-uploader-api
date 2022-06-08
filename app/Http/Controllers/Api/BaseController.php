@@ -9,7 +9,15 @@ class BaseController extends Controller
     private $okCode = 200;
     private $errorCode = 404;
 
-    public function handleResponse($file)
+    public function handleResponse($message)
+    {
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+        ], $this->okCode);
+    }
+
+    public function handleResponseFile($file)
     {
         return response()->json([
             'success' => true,
